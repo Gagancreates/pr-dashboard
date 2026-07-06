@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "name": "pr-dashboard",
+  "version": "0.1.0",
+  "description": "Open PRs on rowboatlabs/rowboat",
+  "capabilities": ["github"],
+  "dataContracts": [
+    { "file": "data.json", "requiredKeys": ["updatedAt", "repo", "items"], "nonEmptyArrayKeys": [] }
+  ]
+}
