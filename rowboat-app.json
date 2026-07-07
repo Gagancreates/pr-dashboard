@@ -1,10 +1,23 @@
 {
   "schemaVersion": 1,
   "name": "pr-dashboard",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Open PRs on rowboatlabs/rowboat",
-  "capabilities": ["github"],
+  "capabilities": [
+    "github"
+  ],
   "dataContracts": [
-    { "file": "data.json", "requiredKeys": ["updatedAt", "repo", "items"], "nonEmptyArrayKeys": [] }
+    {
+      "file": "data.json",
+      "requiredKeys": [
+        "updatedAt",
+        "repo",
+        "items"
+      ],
+      "nonEmptyArrayKeys": []
+    }
+  ],
+  "agents": [
+    "refresh.yaml"
   ]
 }
