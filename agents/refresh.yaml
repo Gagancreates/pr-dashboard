@@ -1,21 +1,26 @@
-name: PR Dashboard refresh (rowboatlabs/rowboat)
+name: PR Dashboard refresh
 instructions: >-
-  Refresh the "pr-dashboard" Mini App's data with the 10 most recently updated
-  OPEN pull requests on `rowboatlabs/rowboat`.
+  Refresh the "pr-dashboard" app's data with the 10 most recently updated OPEN
+  pull requests on the user's configured repo.
 
 
   Steps every run:
 
-  1. Call the Composio tool `GITHUB_LIST_PULL_REQUESTS` with `{ owner:
-  "rowboatlabs", repo: "rowboat", state: "open", per_page: 10, sort: "updated",
+  1. Call `app-read-data` with `{ appFolder: "pr-dashboard", file:
+  "config.json" }`. It contains `{ "repo": "<owner>/<repo>" }` — the repo the
+  user picked in the app. If the file is missing or has no `repo`, STOP and
+  journal "no repo configured yet" — do NOT call app-set-data.
+
+  2. Call the Composio tool `GITHUB_LIST_PULL_REQUESTS` with `{ owner:
+  "<owner>", repo: "<repo>", state: "open", per_page: 10, sort: "updated",
   direction: "desc" }`. Do NOT paginate — take only the first page (10 items
   max).
 
-  2. If the tool call fails (error, missing connection, non-2xx), STOP — do NOT
+  3. If the tool call fails (error, missing connection, non-2xx), STOP — do NOT
   call `app-set-data`. Leave the previous good data in place. Journal the
   failure in the run summary.
 
-  3. For each PR in `data.pull_requests`, project it to this shape (and NOTHING
+  4. For each PR in `data.pull_requests`, project it to this shape (and NOTHING
   else):
      ```
      {
@@ -35,15 +40,18 @@ instructions: >-
      }
      ```
      Skip any PR missing a `number` or `html_url`.
-  4. Sort the resulting array by `updatedAt` DESCENDING (most recently updated
+
+  5. Sort the resulting array by `updatedAt` DESCENDING (most recently updated
   first). Cap at 10 items just in case.
 
-  5. Call `app-set-data` with:
+  6. Call `app-set-data` with:
      - `appFolder`: "pr-dashboard"
      - `file`: "data.json"
-     - `data`: `{ "updatedAt": "<now ISO 8601 UTC>", "repo": "rowboatlabs/rowboat", "items": <the sorted array> }`
+     - `data`: `{ "updatedAt": "<now ISO 8601 UTC>", "repo": "<owner>/<repo>", "items": <the sorted array> }`
      Pass `data` as an object — do NOT `JSON.stringify` it.
-  6. Summarize in one line: PR count written and top 3 titles by updatedAt.
+
+  7. Summarize in one line: repo, PR count written, and top 3 titles by
+  updatedAt.
 
 
   This task is OUTPUT-mode / side-effect: do NOT rewrite `index.md` with the PR

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "name": "pr-dashboard",
-  "version": "0.1.1",
-  "description": "Open PRs on rowboatlabs/rowboat",
+  "version": "0.1.2",
+  "description": "Pick a GitHub repo and get a live dashboard of its open pull requests",
   "capabilities": [
     "github"
   ],
